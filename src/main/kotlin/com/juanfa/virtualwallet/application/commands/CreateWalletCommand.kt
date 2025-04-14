@@ -10,5 +10,6 @@ data class CreateWalletCommand (
     val type: String,
     val owner: UUID,
     val initialAmount: Int,
-    val create: LocalDateTime
+    val create: LocalDateTime,
+    val update: LocalDateTime
 )

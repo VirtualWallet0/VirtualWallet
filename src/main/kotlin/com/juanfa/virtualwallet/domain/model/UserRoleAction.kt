@@ -14,7 +14,7 @@ enum class UserActionType{
 
 @Entity
 @Table(name = "user_role_actions")
-data class UserRoleAction (
+data class UserRole (
     @Id
     val id: UUID,
 

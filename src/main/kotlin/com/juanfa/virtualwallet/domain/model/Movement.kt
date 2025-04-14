@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 enum class MovementStatus{
-    Pending, Approved, Rejected
+    PENDING, APPROVED, REJECTED
 }
 /*
 data class Movement (
@@ -21,7 +21,7 @@ data class Movement (
 )*/
 @Entity
 @Table(name = "movements")
-data class Movement (
+data class Movement(
     @Id
     val id: UUID = UUID.randomUUID(),
 
@@ -36,13 +36,19 @@ data class Movement (
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: MovementStatus = MovementStatus.Pending,
+    val status: MovementStatus,
 
-    @Column(nullable = false)
-    val startMovement: UUID,
+    @Column(name = "start_movement_time", nullable = false)
+    val startMovementTime: LocalDateTime,
 
-    @Column(nullable = false)
-    val approveMovement: UUID,
+    @Column(name = "start_movement_by", nullable = true)
+    val startMovementBy: UUID?,
+
+    @Column(name = "approve_movement_time", nullable = true)
+    val approveMovementTime: LocalDateTime?,
+
+    @Column(name = "approve_movement_by", nullable = true)
+    val approveMovementBy: UUID?,
 
     @Column(nullable = false)
     val created: LocalDateTime = LocalDateTime.now(),
