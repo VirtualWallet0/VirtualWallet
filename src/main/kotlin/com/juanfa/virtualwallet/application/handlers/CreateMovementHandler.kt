@@ -11,6 +11,9 @@ class CreateMovementHandler(private val movementRepository: MovementRepository) 
         if (command.amount <=0){
             throw IllegalArgumentException("Amount must be positive")
         }
+        if(command.originWallet == command.destinyWallet){
+            throw IllegalArgumentException("Origin and destiny wallets must be different")
+        }
         val movement = Movement(
             id = command.id,
             originWallet = command.originWallet,

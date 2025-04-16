@@ -1,6 +1,7 @@
 package com.juanfa.virtualwallet.domain.repository
 
 import com.juanfa.virtualwallet.domain.model.Wallet
+import org.springframework.stereotype.Repository
 import java.util.UUID
 
 interface WalletRepository {

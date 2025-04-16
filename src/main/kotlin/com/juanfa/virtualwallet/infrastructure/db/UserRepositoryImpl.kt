@@ -1,6 +1,7 @@
 package com.juanfa.virtualwallet.infrastructure.db
 
 import com.juanfa.virtualwallet.domain.model.User
+import com.juanfa.virtualwallet.domain.repository.UserRepository
 import org.springframework.stereotype.Component
 import java.util.*
 

@@ -136,4 +136,27 @@ class CreateMovementHandlerTest {
                 update = LocalDateTime.now()
             )
         }
+    @Test
+    fun testShouldFailIfOriginAndDestinyAreTheSame() {
+        val walletId = UUID.randomUUID()
+        val command = CreateMovementCommand(
+            id = UUID.randomUUID(),
+            originWallet = walletId,
+            destinyWallet = walletId,
+            amount = 2500,
+            status = MovementStatus.PENDING,
+            startMovementTime = LocalDateTime.now(),
+            startMovementBy = UUID.randomUUID(),
+            approveMovementTime = null,
+            approveMovementBy = null,
+            created = LocalDateTime.now(),
+            update = LocalDateTime.now()
+        )
+        val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+            handler.handle(command)
+        }
+
+        assertEquals("Origin and destiny wallets must be different", exception.message)
+    }
+
 }

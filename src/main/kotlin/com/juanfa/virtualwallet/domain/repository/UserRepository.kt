@@ -1,4 +1,4 @@
-package com.juanfa.virtualwallet.infrastructure.db
+package com.juanfa.virtualwallet.domain.repository
 
 import com.juanfa.virtualwallet.domain.model.User
 import java.util.*

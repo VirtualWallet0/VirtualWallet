@@ -2,7 +2,7 @@ package com.juanfa.virtualwallet.application.handlers
 
 import com.juanfa.virtualwallet.application.commands.CreateUserCommand
 import com.juanfa.virtualwallet.domain.model.User
-import com.juanfa.virtualwallet.infrastructure.db.UserRepository
+import com.juanfa.virtualwallet.domain.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

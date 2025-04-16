@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 enum class RequestStatus{
-    Pending, Approved, Rejected
+    PENDING, APPROVED, REJECTED
 }
 /*
 data class MoneyRequest (
@@ -35,7 +35,7 @@ data class MoneyRequest (
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: RequestStatus = RequestStatus.Pending,
+    val status: RequestStatus = RequestStatus.PENDING,
 
     @Column(nullable = false)
     val wallet: UUID,

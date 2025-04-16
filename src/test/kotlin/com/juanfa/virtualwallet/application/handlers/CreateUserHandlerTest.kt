@@ -1,7 +1,7 @@
 package com.juanfa.virtualwallet.application.handlers
 
 import com.juanfa.virtualwallet.application.commands.CreateUserCommand
-import com.juanfa.virtualwallet.infrastructure.db.UserRepository
+import com.juanfa.virtualwallet.domain.repository.UserRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
