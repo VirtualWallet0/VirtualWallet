@@ -52,9 +52,8 @@ class CreateMoneyRequestHandlerTest {
         )
         handler.handle(command)
 
-        val save = moneyRequestRepository.findById(command.id)
+        val save = moneyRequestRepository.findById(command.id).orElseThrow(){IllegalArgumentException("Money request not found")}
 
-        assertNotNull(save)
         assertEquals(command.sender, save.sender)
         assertEquals(command.recipient, save.recipient)
         assertEquals(command.amount, save.amount)

@@ -10,7 +10,7 @@ class MoneyRequestRepositoryImpl (private val jpaRepository: MoneyRequestReposit
         return jpaRepository.save(moneyRequest)
     }
 
-    override fun findById(id: UUID): MoneyRequest? {
-        return jpaRepository.findById(id).orElse(null)
+    override fun findById(id: UUID): Optional<MoneyRequest> {
+        return jpaRepository.findById(id)
     }
 }

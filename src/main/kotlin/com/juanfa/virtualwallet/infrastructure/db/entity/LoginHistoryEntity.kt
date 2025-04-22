@@ -1,4 +1,4 @@
-package com.juanfa.virtualwallet.domain.model
+package com.juanfa.virtualwallet.infrastructure.db.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -7,16 +7,9 @@ import jakarta.persistence.Table
 import java.time.LocalDateTime
 import java.util.UUID
 
-
-data class LoginHistory (
-    val id: UUID,
-    val user: UUID,
-    val dateTime: LocalDateTime = LocalDateTime.now(),
-    val success: Boolean
-)
-/*@Entity
+@Entity
 @Table(name = "login_histories")
-data class LoginHistory (
+data class LoginHistoryEntity(
     @Id
     val id: UUID,
 
@@ -28,4 +21,4 @@ data class LoginHistory (
 
     @Column(nullable = false)
     val success: Boolean
-)*/
+)

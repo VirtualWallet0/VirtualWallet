@@ -2,10 +2,12 @@ package com.juanfa.virtualwallet.application.handlers
 
 import com.juanfa.virtualwallet.application.commands.CreateRoleCommand
 import com.juanfa.virtualwallet.domain.model.Role
+import com.juanfa.virtualwallet.domain.model.WalletType
 import com.juanfa.virtualwallet.domain.repository.RoleRepository
 import com.juanfa.virtualwallet.domain.repository.UserRepository
 import com.juanfa.virtualwallet.domain.repository.WalletRepository
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 import java.util.*
 
 @Component
@@ -30,6 +32,13 @@ class CreateRoleHandler(private val roleRepository: RoleRepository, private val 
         if(existing .isPresent){
             throw IllegalArgumentException("Role already exists for this user and wallet")
         }
+        if(wallet.type != WalletType.COMPANY){
+            throw IllegalArgumentException("Roles can only be assigned to wallets of type COMPANY")
+        }
+        if (command.assign.isAfter(LocalDateTime.now())) {
+            throw IllegalArgumentException("Assign date cannot be in the future")
+        }
+
 
         val role = Role(
             id = command.id,

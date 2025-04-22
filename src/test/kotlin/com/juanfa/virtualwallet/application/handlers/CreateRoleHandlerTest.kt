@@ -45,8 +45,8 @@ class CreateRoleHandlerTest {
         val user = User(
             id = userId,
             name = "Juan",
-            created = LocalDateTime.now(),
-            update = LocalDateTime.now(),
+            created = assign,
+            update = assign,
             password = "123456"
         )
         userRepository.save(user)
@@ -55,10 +55,10 @@ class CreateRoleHandlerTest {
             id = walletId,
             name = "Main Wallet",
             amount = 1000,
-            type = WalletType.PERSONAL,
+            type = WalletType.COMPANY,
             owner = userId,
-            created = LocalDateTime.now(),
-            update = LocalDateTime.now()
+            created = assign,
+            update = assign
         )
         walletRepository.save(wallet)
 
@@ -66,7 +66,7 @@ class CreateRoleHandlerTest {
             id = id,
             user = userId,
             wallet = walletId,
-            roleType = roleType,
+            roleType = RoleType.ADMIN,
             assign = assign
         )
         handler.handle(command)
@@ -202,6 +202,142 @@ class CreateRoleHandlerTest {
             handler.handle(command.copy(id = UUID.randomUUID()))
         }
         assertEquals("Role already exists for this user and wallet", exception.message)
+    }
+    @Test
+    fun testShouldFailWhenAssigningRoleToNonCompanyWallet() {
+        val userId = UUID.randomUUID()
+        val walletId = UUID.randomUUID()
+        val assign = LocalDateTime.now()
+
+        val user = User(
+            id = userId,
+            name = "user1",
+            created = assign,
+            update = assign,
+            password = "pswd"
+        )
+        userRepository.save(user)
+
+        val wallet = Wallet(
+            id = walletId,
+            name = "personalwallet",
+            amount = 888,
+            type = WalletType.PERSONAL,
+            owner = userId,
+            created = assign,
+            update = assign
+        )
+        walletRepository.save(wallet)
+
+        val command = CreateRoleCommand(
+            id = UUID.randomUUID(),
+            user = userId,
+            wallet = walletId,
+            roleType = RoleType.ADMIN,
+            assign = assign
+        )
+
+        val exception = assertThrows<IllegalArgumentException> {
+            handler.handle(command)
+        }
+        assertEquals("Roles can only be assigned to wallets of type COMPANY", exception.message)
+    }
+    @Test
+    fun testShouldFailWhenAssignDateIsInTheFuture() {
+        val userId = UUID.randomUUID()
+        val walletId = UUID.randomUUID()
+        val futureDate = LocalDateTime.now().plusDays(1)
+
+        val user = User(
+            id = userId,
+            name = "UserFuture",
+            created = LocalDateTime.now(),
+            update = LocalDateTime.now(),
+            password = "555"
+        )
+        userRepository.save(user)
+
+        val wallet = Wallet(
+            id = walletId,
+            name = "walletfuture",
+            amount = 1234,
+            type = WalletType.COMPANY,
+            owner = userId,
+            created = LocalDateTime.now(),
+            update = LocalDateTime.now()
+        )
+        walletRepository.save(wallet)
+
+        val command = CreateRoleCommand(
+            id = UUID.randomUUID(),
+            user = userId,
+            wallet = walletId,
+            roleType = RoleType.ADMIN,
+            assign = futureDate
+        )
+        val exception = assertThrows<IllegalArgumentException> {
+            handler.handle(command)
+        }
+        assertEquals("Assign date cannot be in the future", exception.message)
+    }
+    @Test
+    fun testShouldAllowReassigningRoleAfterDeletion() {
+        val id1 = UUID.randomUUID()
+        val id2 = UUID.randomUUID()
+        val userId = UUID.randomUUID()
+        val walletId = UUID.randomUUID()
+        val assign = LocalDateTime.now()
+
+        val user = User(
+            id = userId,
+            name = "lele",
+            created = assign,
+            update = assign,
+            password = "2323"
+        )
+        userRepository.save(user)
+
+        val wallet = Wallet(
+            id = walletId,
+            name = "Company Wallet",
+            amount = 5000,
+            type = WalletType.COMPANY,
+            owner = userId,
+            created = assign,
+            update = assign
+        )
+        walletRepository.save(wallet)
+
+        val firstCommand = CreateRoleCommand(
+            id = id1,
+            user = userId,
+            wallet = walletId,
+            roleType = RoleType.OPERATOR,
+            assign = assign
+        )
+        handler.handle(firstCommand)
+
+        val existingRole = roleRepository.findById(id1)
+        assertTrue(existingRole.isPresent)
+
+        roleRepository.delete(id1)
+
+
+        val secondCommand = CreateRoleCommand(
+            id = id2,
+            user = userId,
+            wallet = walletId,
+            roleType = RoleType.OPERATOR,
+            assign = assign
+        )
+
+        handler.handle(secondCommand)
+
+        val saved = roleRepository.findById(id2)
+        assertTrue(saved.isPresent)
+        assertEquals(userId, saved.get().user)
+        assertEquals(walletId, saved.get().wallet)
+        assertEquals(RoleType.OPERATOR, saved.get().roleType)
     }
 
 

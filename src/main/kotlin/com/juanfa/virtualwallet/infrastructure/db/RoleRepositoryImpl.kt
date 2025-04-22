@@ -20,6 +20,10 @@ class RoleRepositoryImpl(private val jpaRepository: RoleRepositoryJPA) : RoleRep
         return jpaRepository.findByUserAndWallet(userId, walletId).map {it.toDomain()}
     }
 
+    override fun delete(id: UUID) {
+        return jpaRepository.deleteById(id)
+    }
+
     private fun Role.toEntity() = RoleEntity(
         id = id,
         user = user,
