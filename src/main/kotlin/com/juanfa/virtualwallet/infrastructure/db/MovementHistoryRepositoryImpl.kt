@@ -14,4 +14,7 @@ class MovementHistoryRepositoryImpl (private val jpaRepository: MovementHistoryR
     override fun findByMovement(movementId: UUID): List<MovementHistory> {
         return jpaRepository.findByMovement(movementId)
     }
+    override fun findByOriginWalletAndDestinyWallet(originWallet: UUID, destinyWallet: UUID): List<MovementHistory> {
+        return jpaRepository.findByOriginWalletAndDestinyWallet(originWallet, destinyWallet)
+    }
 }

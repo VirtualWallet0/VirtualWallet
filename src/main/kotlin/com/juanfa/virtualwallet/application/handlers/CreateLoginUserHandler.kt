@@ -4,8 +4,11 @@ import com.juanfa.virtualwallet.application.commands.LoginUserCommand
 import com.juanfa.virtualwallet.domain.model.LoginHistory
 import com.juanfa.virtualwallet.domain.repository.LoginHistoryRepository
 import com.juanfa.virtualwallet.domain.repository.UserRepository
+import com.juanfa.virtualwallet.infrastructure.http.dto.LoginResponseDTO
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class CreateLoginUserHandler (private val userRepository: UserRepository, private val loginHistoryRepository: LoginHistoryRepository) {
     fun handle(command: LoginUserCommand) {
         val user = userRepository.findById(command.userId).orElseThrow(){

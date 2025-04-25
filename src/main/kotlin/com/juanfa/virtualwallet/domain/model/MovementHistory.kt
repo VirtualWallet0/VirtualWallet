@@ -36,8 +36,8 @@ data class MovementHistory (
     @Column(nullable = false)
     val success: Boolean,
 
-    @Column(nullable = false)
-    val movement: UUID,
+    @Column(nullable = true)
+    val movement: UUID?,
 
     @Column
     val failureReason: String? = null

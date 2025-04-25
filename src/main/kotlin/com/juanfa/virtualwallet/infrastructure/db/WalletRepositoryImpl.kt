@@ -15,4 +15,7 @@ class WalletRepositoryImpl (private val walletRepositoryJPA: WalletRepositoryJPA
     override fun findById(id: UUID): Wallet? {
         return walletRepositoryJPA.findById(id).orElse(null)
     }
+    override fun findByOwner(ownerId: UUID): List<Wallet> {
+        return walletRepositoryJPA.findByOwner(ownerId)
+    }
 }

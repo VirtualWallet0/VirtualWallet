@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface MovementHistoryRepositoryJPA : JpaRepository<MovementHistory, UUID> {
     fun findByMovement(movement: UUID): List<MovementHistory>
+    fun findByOriginWalletAndDestinyWallet(originWallet: UUID, destinyWallet: UUID): List<MovementHistory>
 }
