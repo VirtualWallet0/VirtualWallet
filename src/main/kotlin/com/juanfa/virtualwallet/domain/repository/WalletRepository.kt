@@ -7,4 +7,5 @@ import java.util.UUID
 interface WalletRepository {
     fun save (wallet: Wallet): Wallet
     fun findById(id: UUID): Wallet?
+    fun findByOwner(ownerId: UUID): List<Wallet>
 }

@@ -14,4 +14,7 @@ class UserRepositoryImpl (private val userRepositoryJPA: UserRepositoryJPA): Use
     override fun findById(id: UUID): Optional<User> {
         return userRepositoryJPA.findById(id)
     }
+    override fun findByName(name: String): Optional<User> {
+        return userRepositoryJPA.findByName(name)
+    }
 }

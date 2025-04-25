@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface WalletRepositoryJPA: JpaRepository<Wallet, UUID>
+interface WalletRepositoryJPA: JpaRepository<Wallet, UUID>{
+    fun findByOwner(ownerId: UUID): List<Wallet>
+}

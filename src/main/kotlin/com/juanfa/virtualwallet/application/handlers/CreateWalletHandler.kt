@@ -5,6 +5,7 @@ import com.juanfa.virtualwallet.domain.model.Wallet
 import com.juanfa.virtualwallet.domain.model.WalletType
 import com.juanfa.virtualwallet.domain.repository.WalletRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CreateWalletHandler (private val walletRepository: WalletRepository) {
@@ -22,14 +23,16 @@ class CreateWalletHandler (private val walletRepository: WalletRepository) {
         }
         try {
             val type = WalletType.valueOf(command.type.uppercase())
+            val currentDateTime = LocalDateTime.now()
+
             val wallet = Wallet(
                 id = command.id,
                 name = command.name,
                 amount = command.initialAmount,
                 type = type,
                 owner = command.owner,
-                created = command.create,
-                update = command.update
+                created = currentDateTime,
+                update = currentDateTime
             )
             return walletRepository.save(wallet)
 

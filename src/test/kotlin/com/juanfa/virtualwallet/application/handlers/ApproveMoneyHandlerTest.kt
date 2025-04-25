@@ -395,4 +395,43 @@ class ApproveMoneyRequestHandlerTest {
         assertEquals(800, updatedOriginWallet.amount)
         assertEquals(700, updatedDestinyWallet.amount)
     }
+    @Test
+    fun testShouldThrowExceptionIfApproverIsSameAsRequester() {
+        val userId = UUID.randomUUID()
+        val walletId = UUID.randomUUID()
+        val amount = 100
+
+        val originWallet = Wallet(
+            id = walletId,
+            name = "Origin wallet",
+            amount = 500,
+            type = WalletType.COMPANY,
+            owner = UUID.randomUUID(),
+            created = LocalDateTime.now(),
+            update = LocalDateTime.now()
+        )
+        walletRepositoryImpl.save(originWallet)
+
+        val moneyRequest = MoneyRequest(
+            id = UUID.randomUUID(),
+            sender = userId,
+            recipient = UUID.randomUUID(),
+            amount = amount,
+            status = RequestStatus.PENDING,
+            wallet = walletId,
+            created = LocalDateTime.now(),
+            update = LocalDateTime.now()
+        )
+        moneyRequestRepositoryImpl.save(moneyRequest)
+
+        val command = ApproveMoneyRequestCommand(
+            requestId = moneyRequest.id,
+            approvedBy = userId
+        )
+        val exception = assertFailsWith<IllegalArgumentException> {
+            handler.handle(command)
+        }
+        assertEquals("User not authorized to approve this request", exception.message)
+
+    }
 }

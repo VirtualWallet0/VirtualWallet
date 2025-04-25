@@ -25,6 +25,9 @@ class ApproveMoneyRequestHandler(
         if (moneyRequest.status != RequestStatus.PENDING) {
             throw IllegalArgumentException("Money request is already processed")
         }
+        if(moneyRequest.sender == command.approvedBy) {
+            throw IllegalArgumentException("User not authorized to approve this request")
+        }
 
         val originWallet = walletRepository.findById(moneyRequest.wallet)
             ?: throw IllegalArgumentException("Origin wallet not found")
