@@ -1,0 +1,42 @@
+package com.juanfa.virtualwallet.old.infrastructure.db
+
+import com.juanfa.virtualwallet.old.domain.model.Role
+import com.juanfa.virtualwallet.old.domain.model.RoleEntity
+import com.juanfa.virtualwallet.old.domain.repository.RoleRepository
+import org.springframework.stereotype.Repository
+import java.util.*
+
+@Repository
+class RoleRepositoryImpl(private val jpaRepository: RoleRepositoryJPA) : RoleRepository {
+
+    override fun save(role: Role) {
+        jpaRepository.save(role.toEntity())
+    }
+
+    override fun findById(id: UUID): Optional<Role> {
+        return jpaRepository.findById(id).map { it.toDomain() }
+    }
+    override fun findByUserAndWallet(userId: UUID, walletId: UUID): Optional<Role>{
+        return jpaRepository.findByUserAndWallet(userId, walletId).map {it.toDomain()}
+    }
+
+    override fun delete(id: UUID) {
+        return jpaRepository.deleteById(id)
+    }
+
+    private fun Role.toEntity() = RoleEntity(
+        id = id,
+        user = user,
+        wallet = wallet,
+        roleType = roleType,
+        assign = assign
+    )
+
+    private fun RoleEntity.toDomain() = Role(
+        id = id,
+        user = user,
+        wallet = wallet,
+        roleType = roleType,
+        assign = assign
+    )
+}
